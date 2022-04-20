@@ -28,6 +28,7 @@ class CreatePayment {
               as: 'contractor',
             }]
           }],
+          lock: true,
           transaction: t
         }
       );
@@ -44,7 +45,7 @@ class CreatePayment {
       // fetching payer profile is necessary with set active transaction
       // ideally transaction should be applied for all queries
       // and this transaction should be created when request is made to API...
-      const payer = await this.profileService.getById(payerId, { transaction: t });
+      const payer = await this.profileService.getById(payerId, { transaction: t, lock: true });
 
       if (payer.balance - amount < 0) {
         throw new BadRequest("Not Enough funds");
@@ -53,21 +54,21 @@ class CreatePayment {
       await this.jobService.update(
         { paid: 1, paymentDate: new Date() },
         { id: jobId },
-        { transaction: t }
+        { transaction: t, lock: true }
       );
 
       // Update ballance of payer
       await this.profileService.update(
         { balance: payer.balance - amount },
         { id: payerId },
-        { transaction: t }
+        { transaction: t, lock: true }
       );
 
       // Update ballance of Contractor
       await this.profileService.update(
         { balance: job.contract.contractor.balance + amount },
         { id: job.contract.contractor.id },
-        { transaction: t }
+        { transaction: t, lock: true }
       );
     });
   }

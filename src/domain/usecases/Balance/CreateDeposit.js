@@ -10,7 +10,7 @@ class CreateDeposit {
   async execute(clientId, amount) {
     await this.jobService.dbConnection.transaction(async (t) => {
 
-      const allUnpaidJobs = await this.jobService.getAllUnpaid(clientId, PROFILE_TYPES.client, { transaction: t });
+      const allUnpaidJobs = await this.jobService.getAllUnpaid(clientId, PROFILE_TYPES.client, { transaction: t, lock: true });
 
       let totalUnpaidAmount = 0;
       allUnpaidJobs.forEach(item => { totalUnpaidAmount += item.price });
@@ -23,13 +23,13 @@ class CreateDeposit {
         throw new BadRequest(`Deposit above ${maxAmountToDeposit} can not be made.`);
       }
 
-      const clientForDepositing = await this.profileService.getById(clientId, { transaction: t });
+      const clientForDepositing = await this.profileService.getById(clientId, { transaction: t, lock: true });
       
       // Update balance of Client
       await this.profileService.update(
         { balance: clientForDepositing.balance + amount },
         { id: clientForDepositing.id },
-        { transaction: t }
+        { transaction: t, lock: true }
       );
    
     });
