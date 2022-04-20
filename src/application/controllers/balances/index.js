@@ -1,5 +1,5 @@
-// import validate from '@application/middlewares/httpRequest/validate';
-// import commonValidationSchemes from '@infrastructure/validation/controllers/common';
+import validate from '@application/middlewares/httpRequest/validate';
+import validationSchemes from '@infrastructure/validation/controllers/balance';
 
 import deposit from './deposit';
 
@@ -16,7 +16,10 @@ export default (
     handler: deposit(BalanceUseCases),
     method: 'POST',
     path: '/balances/deposit/:id',
-    middlewares: [],
+    middlewares: [
+      validate(validationSchemes.deposit.params, 'params'),
+      validate(validationSchemes.deposit.body, 'body'),
+    ],
     environments: ['prod', 'dev', 'staging'],
   },
 ];

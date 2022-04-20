@@ -1,5 +1,5 @@
-// import validate from '@application/middlewares/httpRequest/validate';
-// import commonValidationSchemes from '@infrastructure/validation/controllers/common';
+import validate from '@application/middlewares/httpRequest/validate';
+import validationSchemes from '@infrastructure/validation/controllers/job';
 
 import getAllUnpaid from './get-all-unpaid';
 import payJob from './pay-job';
@@ -26,6 +26,8 @@ export default (
     method: 'POST',
     path: '/jobs/:job_id/pay',
     middlewares: [
+      validate(validationSchemes.jobPay.params, 'params'),
+      validate(validationSchemes.jobPay.body, 'body'),
       Authenticate,
       Authorize('client')
     ],
