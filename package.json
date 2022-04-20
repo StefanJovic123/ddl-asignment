@@ -1,0 +1,90 @@
+{
+  "name": "ddl-backend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/node": "^7.16.8",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
+    "dotenv": "^16.0.0",
+    "express": "4.17.1",
+    "helmet": "^5.0.2",
+    "joi": "^17.6.0",
+    "lodash": "^4.17.21",
+    "module-alias": "^2.2.2",
+    "sequelize": "^6.3.4",
+    "sqlite3": "^4.0.1"
+  },
+  "scripts": {
+    "start": "nodemon --exec babel-node ./src/index.js",
+    "seed": "babel-node ./scripts/seedDb.js",
+    "test": "set NODE_OPTIONS=--experimental-vm-modules & jest --coverage --passWithNoTests --testPathPattern=./src/"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.5",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-transform-destructuring": "^7.14.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.14.5",
+    "@babel/preset-env": "^7.14.5",
+    "@jest/globals": "^27.0.3",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "concurrently": "4.1.0",
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "jest": "^27.0.4",
+    "lint-staged": "^11.0.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.3.1"
+  },
+  "engines": {
+    "node": ">=10.16.3"
+  },
+  "_moduleAliases": {
+    "@common": "./src/common",
+    "@application": "./src/application",
+    "@domain": "./src/domain",
+    "@infrastructure": "./src/infrastructure"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "v2/src/**/*.js": [
+      "eslint --fix",
+      "npm test"
+    ]
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6"
+    ],
+    "setupFiles": [
+      "./loadEnv.js"
+    ],
+    "moduleNameMapper": {
+      "@common(.*)$": "<rootDir>/src/common/$1",
+      "@application(.*)$": "<rootDir>/src/application/$1",
+      "@infrastructure(.*)$": "<rootDir>/src/infrastructure/$1",
+      "@domain(.*)$": "<rootDir>/src/domain/$1"
+    }
+  },
+  "engineStrict": true
+}
