@@ -1,9 +1,11 @@
 import Joi from 'joi';
-import common from './common';
+import { id } from './common';
 
 export default {
   jobPay: {
-    params: common.idParam,
+    params: Joi.object({
+      job_id: id
+    }),
     body: Joi.object({
       amount: Joi.number().positive().required()
     })
